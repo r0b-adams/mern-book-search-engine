@@ -1,4 +1,6 @@
 export const resolvers = {
-  Query: {},
-  Mutation: {},
+  Query: {
+    users: async () => {},
+    books: async () => {},
+  },
 };
