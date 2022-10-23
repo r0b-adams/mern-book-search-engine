@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
+  "type": "module",
   "scripts": {
-    "start": "node server.js",
-    "watch": "nodemon server.js"
+    "resolve:modules": "NODE_OPTIONS='--experimental-specifier-resolution=node'",
+    "start": "node --experimental-specifier-resolution=node server.js",
+    "watch": "node --experimental-specifier-resolution=node server.js"
   },
   "keywords": [],
   "author": "",
