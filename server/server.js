@@ -8,6 +8,9 @@ import { ENV } from "./utils/constants";
 const PORT = process.env.PORT || 3001;
 const app = express();
 
+// TODO: add middleware to context property
+// we want the context fn to grab jwt from auth headers,
+// decode, and return the payload
 const server = new ApolloServer({
   typeDefs,
   resolvers,
