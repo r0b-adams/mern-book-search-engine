@@ -1,10 +1,8 @@
-import { Schema, model } from "mongoose";
+import mongoose from "mongoose";
 import { hash, compare } from "bcrypt";
+import { bookSchema } from "./Book";
 
-// import schema from Book.js
-import bookSchema from "./Book";
-
-const userSchema = new Schema(
+const userSchema = new mongoose.Schema(
   {
     username: {
       type: String,
@@ -50,4 +48,4 @@ userSchema.virtual("bookCount").get(() => {
   return this.savedBooks.length;
 });
 
-export const User = model("User", userSchema);
+export const User = mongoose.model("User", userSchema);
