@@ -1,7 +1,7 @@
 import { gql } from "apollo-server-express";
 
 export const typeDefs = gql(`
-  # Models
+  # MODELS
   type User {
     _id: ID!
     username: String!
@@ -20,7 +20,6 @@ export const typeDefs = gql(`
     link: String
   }
 
-  # Authentication
   type Auth {
     token: ID!
     user: User
@@ -29,7 +28,12 @@ export const typeDefs = gql(`
   # QUERIES
   type Query {
     users: [User]
-    books: [Book]
+    user(_id: ID!): User
   }
 
+  # MUTATIONS
+  type Mutation {
+    signup(username: String!, email: String!, password: String!): Auth
+    login(email: String, password: String!): Auth
+  }
 `);
