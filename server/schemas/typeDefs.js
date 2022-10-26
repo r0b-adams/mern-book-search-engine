@@ -34,6 +34,6 @@ export const typeDefs = gql(`
   # MUTATIONS
   type Mutation {
     signup(username: String!, email: String!, password: String!): Auth
-    login(email: String, password: String!): Auth
+    login(email: String!, password: String!): Auth
   }
 `);
