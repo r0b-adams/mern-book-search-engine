@@ -1,19 +1,20 @@
+import "dotenv/config";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import { join } from "path";
-import { typeDefs, resolvers } from "./schemas";
-import { connection } from "./config";
+
 import { ENV } from "./utils/constants";
+import { connection } from "./config";
+import { typeDefs, resolvers } from "./schemas";
+import { context } from "./utils/auth";
 
 const PORT = process.env.PORT || 3001;
 const app = express();
 
-// TODO: add middleware to context property
-// we want the context fn to grab jwt from auth headers,
-// decode, and return the payload
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  context,
 });
 
 const startApolloServer = async () => {
