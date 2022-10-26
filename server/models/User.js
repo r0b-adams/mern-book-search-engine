@@ -31,9 +31,9 @@ const userSchema = new mongoose.Schema(
 );
 
 // hash user password
-userSchema.pre("save", async next => {
+userSchema.pre("save", async function (next) {
   if (this.isNew || this.isModified("password")) {
-    this.password = await hash(this.password, SALT_ROUNDS);
+    this.password = await hash(this.password, Number(process.env.SALT_ROUNDS));
   }
   next();
 });
@@ -44,7 +44,7 @@ userSchema.methods.isCorrectPassword = async function (password) {
 };
 
 // when we query a user, we'll also get another field called `bookCount` with the number of saved books we have
-userSchema.virtual("bookCount").get(() => {
+userSchema.virtual("bookCount").get(function () {
   return this.savedBooks.length;
 });
 
