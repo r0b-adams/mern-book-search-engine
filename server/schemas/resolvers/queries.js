@@ -1,8 +1,14 @@
 import { AuthenticationError } from "apollo-server-express";
+
 import { User } from "../../models";
 
 export const queries = {
-  users: async () => User.find(),
+  // get all users
+  users: async () => {
+    return User.find();
+  },
+
+  // get a single user by id via context
   user: async (_parent, _args, context) => {
     if (context.user) {
       return User.findById(context.user._id);
