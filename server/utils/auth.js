@@ -1,4 +1,21 @@
-// const jwt = require('jsonwebtoken');
+import jwt from "jsonwebtoken";
+
+import { JWT_EXPIRATION, JWT_SECRET } from "./constants";
+
+export const context = ({ req }) => {
+  const auth = req.headers.authorization;
+  if (auth) {
+    const token = auth.split(" ").pop().trim();
+    if (token) {
+      const user = jwt.verify(token, JWT_SECRET, { maxAge: JWT_EXPIRATION });
+      return { user };
+    }
+  }
+};
+
+export const signToken = user => {
+  return jwt.sign(user, JWT_SECRET, { expiresIn: JWT_EXPIRATION });
+};
 
 // // set token secret and expiration date
 // const secret = 'mysecretsshhhhh';
