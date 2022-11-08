@@ -8,10 +8,13 @@ export const queries = {
     return User.find();
   },
 
-  // get a single user by id via context
-  user: async (_parent, _args, context) => {
-    if (context.user) {
-      return User.findById(context.user._id);
+  // search for logged-in user by id via context
+  me: async (_parent, _args, { userID }) => {
+    if (userID) {
+      const user = User.findById(userID);
+      if (user) {
+        return user;
+      }
     }
     throw new AuthenticationError("Please log in");
   },
