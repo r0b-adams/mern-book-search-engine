@@ -9,9 +9,9 @@ export const queries = {
   },
 
   // search for logged-in user by id via context
-  me: async (_parent, _args, { userID }) => {
-    if (userID) {
-      const user = User.findById(userID);
+  me: async (_parent, _args, { userId }) => {
+    if (userId) {
+      const user = User.findById(userId);
       if (user) {
         return user;
       }
