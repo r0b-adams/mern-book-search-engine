@@ -5,12 +5,13 @@ export const context = ({ req }) => {
   if (auth) {
     const token = auth.split(" ").pop().trim();
     if (token) {
-      const user = jwt.verify(token, process.env.JWT_SECRET, {
+      const { user } = jwt.verify(token, process.env.JWT_SECRET, {
         maxAge: process.env.JWT_EXPIRATION,
       });
-      return { user };
+      req.user = user;
     }
   }
+  return req;
 };
 
 export const signToken = ({ _id, username, email }) => {
