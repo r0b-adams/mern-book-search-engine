@@ -29,7 +29,6 @@ export const mutations = {
       throw new AuthenticationError("Wrong username, email, or password");
     }
     const token = signToken(user);
-    console.log(token);
     return { token, user };
   },
 
@@ -45,8 +44,13 @@ export const mutations = {
   },
 
   removeBook: async (_parent, { bookId }, { userId }) => {
-    console.log("removeBook");
-    console.log(bookId);
-    console.log(userId);
+    if (!userId) {
+      throw new AuthenticationError("Please login");
+    }
+    return await User.findOneAndUpdate(
+      { _id: userId },
+      { $pull: { savedBooks: { bookId } } },
+      { new: true }
+    );
   },
 };
