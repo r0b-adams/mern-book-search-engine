@@ -1,23 +1,42 @@
 import { gql } from "apollo-server-express";
 
 export const typeDefs = gql(`
-  # MODELS
   type User {
     _id: ID!
     username: String!
     email: String!
-    password: String!
+    bookCount: Int
     savedBooks: [Book]
   }
 
+  input AddUserInput {
+    username: String!
+    email: String!
+    password:String!
+  }
+
+  input LoginInput {
+    username: String
+    email: String!
+    password:String!
+  }
+
   type Book {
-    _id:ID!
-    bookID: String!
+    bookId: String!
     title: String!
-    authors: [String]
+    authors: [String]!
     description: String!
-    image: String
-    link: String
+    image: String!
+    link: String!
+  }
+
+  input SaveBookInput {
+    bookId: String!
+    title: String!
+    authors: [String]!
+    description: String!
+    image: String!
+    link: String!
   }
 
   type Auth {
@@ -33,7 +52,9 @@ export const typeDefs = gql(`
 
   # MUTATIONS
   type Mutation {
-    signup(username: String!, email: String!, password: String!): Auth
-    login(email: String!, password: String!): Auth
+    addUser(payload: AddUserInput!): Auth
+    login(payload: LoginInput!): Auth
+    saveBook(payload: SaveBookInput!): User
+    removeBook(bookID: String!): User
   }
 `);
