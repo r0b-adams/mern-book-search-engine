@@ -3,7 +3,7 @@ import { AuthenticationError } from "apollo-server-express";
 
 // create a jwt with user ID as payload
 export const signToken = user => {
-  return jwt.sign({ userID: user._id }, process.env.JWT_SECRET, {
+  return jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRATION,
   });
 };
@@ -22,10 +22,10 @@ export const context = ({ req }) => {
     // then attach to req object
     if (token) {
       try {
-        const { userID } = jwt.verify(token, process.env.JWT_SECRET, {
+        const { userId } = jwt.verify(token, process.env.JWT_SECRET, {
           maxAge: process.env.JWT_EXPIRATION,
         });
-        req.userID = userID;
+        req.userId = userId;
 
         // malformed token, invalid token, expired token
       } catch (error) {
