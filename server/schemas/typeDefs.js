@@ -55,6 +55,6 @@ export const typeDefs = gql(`
     addUser(payload: AddUserInput!): Auth
     login(payload: LoginInput!): Auth
     saveBook(payload: SaveBookInput!): User
-    removeBook(bookID: String!): User
+    removeBook(bookId: String!): User
   }
 `);
