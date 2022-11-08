@@ -5,7 +5,8 @@ import { signToken } from "../../utils/auth";
 import { UniquenessError } from "../../utils/errors";
 
 export const mutations = {
-  signup: async (_parent, { username, email, password }) => {
+  addUser: async (_parent, { payload }) => {
+    const { username, email, password } = payload;
     if (await User.findOne({ username })) {
       throw new UniquenessError("username");
     }
@@ -17,7 +18,8 @@ export const mutations = {
     return { token, user };
   },
 
-  login: async (_parent, { username, email, password }) => {
+  login: async (_parent, { payload }) => {
+    const { username, email, password } = payload;
     const user = await User.findOne({ $or: [{ username }, { email }] });
     if (!user) {
       throw new AuthenticationError("Wrong username, email, or password");
@@ -27,10 +29,24 @@ export const mutations = {
       throw new AuthenticationError("Wrong username, email, or password");
     }
     const token = signToken(user);
+    console.log(token);
     return { token, user };
   },
 
-  // TODO: implement save/delete book functionality
-  // saveBook: async (parent, args, context) => {},
-  // deleteBook: async (parent, args, context) => {},
+  saveBook: async (_parent, { payload }, { userId }) => {
+    if (!userId) {
+      throw new AuthenticationError("Please login");
+    }
+    return await User.findOneAndUpdate(
+      { _id: userId },
+      { $addToSet: { savedBooks: payload } },
+      { new: true, runValidators: true }
+    );
+  },
+
+  removeBook: async (_parent, { bookId }, { userId }) => {
+    console.log("removeBook");
+    console.log(bookId);
+    console.log(userId);
+  },
 };
