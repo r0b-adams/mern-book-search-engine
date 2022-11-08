@@ -44,13 +44,10 @@ export const typeDefs = gql(`
     user: User
   }
 
-  # QUERIES
   type Query {
-    users: [User]
     me: User
   }
 
-  # MUTATIONS
   type Mutation {
     addUser(payload: AddUserInput!): Auth
     login(payload: LoginInput!): Auth
