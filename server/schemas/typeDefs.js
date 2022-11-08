@@ -28,7 +28,7 @@ export const typeDefs = gql(`
   # QUERIES
   type Query {
     users: [User]
-    user(_id: ID!): User
+    me: User
   }
 
   # MUTATIONS
