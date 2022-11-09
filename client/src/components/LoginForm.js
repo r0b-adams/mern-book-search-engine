@@ -1,20 +1,27 @@
-// see SignupForm.js for comments
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { Form, Button, Alert } from "react-bootstrap";
-
-// import { loginUser } from '../utils/API';
-// import Auth from '../utils/auth';
-
-// TODO:
-// Replace the loginUser() functionality imported from the API file with the LOGIN_USER mutation functionality.
+import { useMutation } from "@apollo/client";
+import { LOGIN_USER } from "../gql/mutations";
+import { Auth } from "../utils/auth";
 
 const LoginForm = () => {
   const [userFormData, setUserFormData] = useState({
     email: "",
     password: "",
   });
+  const [login, { error }] = useMutation(LOGIN_USER);
   const [validated] = useState(false);
+  const [errMsg, setErrMsg] = useState(true);
   const [showAlert, setShowAlert] = useState(false);
+
+  useEffect(() => {
+    if (error) {
+      setErrMsg(error.message);
+      setShowAlert(true);
+    } else {
+      setShowAlert(false);
+    }
+  }, [error]);
 
   const handleInputChange = event => {
     const { name, value } = event.target;
@@ -32,18 +39,12 @@ const LoginForm = () => {
     }
 
     try {
-      // const response = await loginUser(userFormData);
-      // if (!response.ok) {
-      //   throw new Error('something went wrong!');
-      // }
-      // const { token, user } = await response.json();
-      // console.log(user);
-      // Auth.login(token);
+      const { data } = await login({ variables: { payload: userFormData } });
+      Auth.login(data.login.token);
     } catch (err) {
-      console.error(err);
-      setShowAlert(true);
+      console.error(err.message);
     }
-    console.log(userFormData);
+    // console.log(userFormData);
     setUserFormData({ email: "", password: "" });
   };
 
@@ -56,7 +57,7 @@ const LoginForm = () => {
           show={showAlert}
           variant="danger"
         >
-          Something went wrong with your login credentials!
+          {errMsg}
         </Alert>
         <Form.Group>
           <Form.Label htmlFor="email">Email</Form.Label>
