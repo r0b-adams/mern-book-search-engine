@@ -1,11 +1,12 @@
 import "dotenv/config";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
-import { join } from "path";
+import { join, dirname } from "path";
+import { fileURLToPath } from "url";
 import { connection } from "./config";
 import { typeDefs, resolvers } from "./schemas";
 import { context } from "./utils/auth";
-
+const __dirname = dirname(fileURLToPath(import.meta.url));
 const PORT = process.env.PORT || 3001;
 const app = express();
 
