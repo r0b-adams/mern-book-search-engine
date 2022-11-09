@@ -9,7 +9,7 @@ import {
   CardColumns,
 } from "react-bootstrap";
 
-import { Auth } from "../utils/auth";
+import { Auth } from "../utils/Auth";
 import { saveBook, searchGoogleBooks } from "../utils/API";
 import { saveBookIds, getSavedBookIds } from "../utils/localStorage";
 
