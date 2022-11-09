@@ -2,8 +2,6 @@ import "dotenv/config";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import { join } from "path";
-
-import { ENV } from "./utils/constants";
 import { connection } from "./config";
 import { typeDefs, resolvers } from "./schemas";
 import { context } from "./utils/auth";
@@ -22,7 +20,7 @@ const startApolloServer = async () => {
   app.use(express.json());
 
   // serve static assets in produciton
-  if (process.env.NODE_ENV === ENV.PRODUCTION) {
+  if (process.env.NODE_ENV === "production") {
     app.use(express.static(join(__dirname, "../client/build")));
   }
 
