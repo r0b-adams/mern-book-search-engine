@@ -3,7 +3,7 @@ import { useMutation } from "@apollo/client";
 import { Form, Button, Alert } from "react-bootstrap";
 
 import { Auth } from "../utils/auth";
-import { ADD_USER } from "../utils/mutations";
+import { ADD_USER } from "../gql/mutations";
 
 const SignupForm = () => {
   const [userFormData, setUserFormData] = useState({
@@ -11,10 +11,10 @@ const SignupForm = () => {
     email: "",
     password: "",
   });
-  const [validated] = useState(false);
   const [addUser, { error }] = useMutation(ADD_USER);
-  const [showAlert, setShowAlert] = useState(false);
+  const [validated] = useState(false);
   const [errMsg, setErrMsg] = useState(true);
+  const [showAlert, setShowAlert] = useState(false);
 
   useEffect(() => {
     if (error) {
