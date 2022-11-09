@@ -2,13 +2,15 @@ import { useState, useEffect } from "react";
 import { Form, Button, Alert } from "react-bootstrap";
 import { useMutation } from "@apollo/client";
 import { LOGIN_USER } from "../gql/mutations";
-import { Auth } from "../utils/auth";
+import { Auth } from "../utils/Auth";
+
+const FORM_INIT = {
+  email: "",
+  password: "",
+};
 
 const LoginForm = () => {
-  const [userFormData, setUserFormData] = useState({
-    email: "",
-    password: "",
-  });
+  const [userFormData, setUserFormData] = useState(FORM_INIT);
   const [login, { error }] = useMutation(LOGIN_USER);
   const [validated] = useState(false);
   const [errMsg, setErrMsg] = useState(true);
@@ -43,9 +45,9 @@ const LoginForm = () => {
       Auth.login(data.login.token);
     } catch (err) {
       console.error(err.message);
+    } finally {
+      setUserFormData(FORM_INIT);
     }
-    // console.log(userFormData);
-    setUserFormData({ email: "", password: "" });
   };
 
   return (
