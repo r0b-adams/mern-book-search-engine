@@ -1,23 +1,29 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
+import { useMutation } from "@apollo/client";
 import { Form, Button, Alert } from "react-bootstrap";
 
-import { createUser } from "../utils/API";
-import Auth from "../utils/auth";
-
-// TODO:
-// Replace the addUser() functionality imported from the API file with the ADD_USER mutation functionality.
+import { Auth } from "../utils/auth";
+import { ADD_USER } from "../utils/mutations";
 
 const SignupForm = () => {
-  // set initial form state
   const [userFormData, setUserFormData] = useState({
     username: "",
     email: "",
     password: "",
   });
-  // set state for form validation
   const [validated] = useState(false);
-  // set state for alert
+  const [addUser, { error }] = useMutation(ADD_USER);
   const [showAlert, setShowAlert] = useState(false);
+  const [errMsg, setErrMsg] = useState(true);
+
+  useEffect(() => {
+    if (error) {
+      setErrMsg(error.message);
+      setShowAlert(true);
+    } else {
+      setShowAlert(false);
+    }
+  }, [error]);
 
   const handleInputChange = event => {
     const { name, value } = event.target;
@@ -25,35 +31,26 @@ const SignupForm = () => {
   };
 
   const handleFormSubmit = async event => {
-    event.preventDefault();
-
-    // check if form has everything (as per react-bootstrap docs)
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-
     try {
-      const response = await createUser(userFormData);
+      event.preventDefault();
 
-      if (!response.ok) {
-        throw new Error("something went wrong!");
+      // check if form has everything (as per react-bootstrap docs)
+      const form = event.currentTarget;
+      if (form.checkValidity() === false) {
+        event.preventDefault();
+        event.stopPropagation();
       }
-
-      const { token, user } = await response.json();
-      console.log(user);
-      Auth.login(token);
+      const { data } = await addUser({ variables: { payload: userFormData } });
+      Auth.login(data.addUser.token);
     } catch (err) {
       console.error(err);
-      setShowAlert(true);
+    } finally {
+      setUserFormData({
+        username: "",
+        email: "",
+        password: "",
+      });
     }
-
-    setUserFormData({
-      username: "",
-      email: "",
-      password: "",
-    });
   };
 
   return (
@@ -67,7 +64,7 @@ const SignupForm = () => {
           show={showAlert}
           variant="danger"
         >
-          Something went wrong with your signup!
+          {errMsg}
         </Alert>
 
         <Form.Group>
