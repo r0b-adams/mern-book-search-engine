@@ -18,15 +18,16 @@ export const mutations = {
     return { token, user };
   },
 
+  // currently the client only sends email & password
   login: async (_parent, { payload }) => {
     const { username, email, password } = payload;
     const user = await User.findOne({ $or: [{ username }, { email }] });
     if (!user) {
-      throw new AuthenticationError("Wrong username, email, or password");
+      throw new AuthenticationError("Wrong email or password");
     }
     const correctPw = await user.isCorrectPassword(password);
     if (!correctPw) {
-      throw new AuthenticationError("Wrong username, email, or password");
+      throw new AuthenticationError("Wrong email or password");
     }
     const token = signToken(user);
     return { token, user };
