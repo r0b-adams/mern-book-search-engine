@@ -27,7 +27,7 @@ export const typeDefs = gql(`
     authors: [String]!
     description: String!
     image: String!
-    link: String!
+    link: String
   }
 
   input SaveBookInput {
@@ -36,7 +36,7 @@ export const typeDefs = gql(`
     authors: [String]!
     description: String!
     image: String!
-    link: String!
+    link: String
   }
 
   type Auth {
