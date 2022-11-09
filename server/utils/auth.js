@@ -30,7 +30,6 @@ export const context = ({ req }) => {
         // malformed token, invalid token, expired token
       } catch (error) {
         console.log(error.message);
-        throw new AuthenticationError(error.message);
       }
     }
   }
