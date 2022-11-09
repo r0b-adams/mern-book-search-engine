@@ -14,7 +14,7 @@ const httpLink = createHttpLink({
   uri: "/graphql",
 });
 
-const authLink = setContext((_, { headers }) => {
+const authLink = setContext((_request, { headers }) => {
   const token = localStorage.getItem("id_token");
   return {
     headers: {
@@ -26,7 +26,21 @@ const authLink = setContext((_, { headers }) => {
 
 const client = new ApolloClient({
   link: authLink.concat(httpLink),
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    typePolicies: {
+      User: {
+        fields: {
+          savedBooks: {
+            // add this to address warning
+            // expicitly overwrite existing arr with incoming arr
+            merge(_existing, incoming) {
+              return incoming;
+            },
+          },
+        },
+      },
+    },
+  }),
 });
 
 function App() {
