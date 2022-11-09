@@ -1,5 +1,6 @@
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import { GET_ME } from "../gql/queries";
+import { REMOVE_BOOK } from "../gql/mutations";
 import { Auth } from "../utils/Auth";
 import { removeBookId } from "../utils/localStorage";
 import {
@@ -10,35 +11,22 @@ import {
   Button,
 } from "react-bootstrap";
 
-// TODO:
-// Use the useMutation() Hook to execute the REMOVE_BOOK mutation in the handleDeleteBook() function instead of the deleteBook() function that's imported from API file.
-
-// (Make sure you keep the removeBookId() function in place!)
 const SavedBooks = () => {
   const { data, loading } = useQuery(GET_ME);
+  const [removeBook] = useMutation(REMOVE_BOOK);
   const userData = data?.me || {};
 
-  // create function that accepts the book's mongo _id value as param and deletes the book from the database
   const handleDeleteBook = async bookId => {
-    // const token = Auth.loggedIn() ? Auth.getToken() : null;
-    // if (!token) {
-    //   return false;
-    // }
-    // try {
-    //   const response = await deleteBook(bookId, token);
-    //   if (!response.ok) {
-    //     throw new Error("something went wrong!");
-    //   }
-    //   const updatedUser = await response.json();
-    //   setUserData(updatedUser);
-    //   // upon success, remove book's id from localStorage
-    //   removeBookId(bookId);
-    // } catch (err) {
-    //   console.error(err);
-    // }
+    try {
+      if (Auth.loggedIn()) {
+        await removeBook({ variables: { bookId } });
+        removeBookId(bookId);
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
-  // if data isn't here yet, say so
   if (loading) {
     return <h2>LOADING...</h2>;
   }
